@@ -1,0 +1,25 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: pet-detector-blue-green-rollout
+  namespace: dev
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: pet-detector
+  template:
+    metadata:
+      labels:
+        app: pet-detector
+    spec:
+      containers:
+        - name: pet-detector
+          image: xxxxxxxxxxx.dkr.ecr.us-east-1.amazonaws.com/pet-detector:latest
+          ports:
+            - containerPort: 8000
+  strategy:
+    blueGreen:
+      activeService: pet-detector-active
+      previewService: pet-detector-preview
+      autoPromotionEnabled: false

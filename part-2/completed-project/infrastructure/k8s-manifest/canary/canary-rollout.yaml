@@ -1,0 +1,28 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: pet-detector-canary-rollout
+  namespace: dev
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: pet-detector
+  template:
+    metadata:
+      labels:
+        app: pet-detector
+    spec:
+      containers:
+        - name: pet-detector
+          image: xxxxxx.your-ecr-repo/pet-detector:latest
+          ports:
+            - containerPort: 8000
+  strategy:
+    canary:
+      steps:
+        - setWeight: 20
+        - pause: {duration: 3m}
+        - setWeight: 50
+        - pause: {duration: 3m}
+        - setWeight: 100

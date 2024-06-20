@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: pet-detector-application
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: 'https://github.com/SlyCreator/EKS-ci-cd-starter-resuse-cluster'
+    targetRevision: HEAD
+    path: infrastructure/k8s-manifest/canary
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
